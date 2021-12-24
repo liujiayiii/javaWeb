@@ -9,25 +9,22 @@
     <h2 class="login-title">用  户  登  录</h2>
     <br>
     <el-form-item style="color: white">
-    用户名：<el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
+    用户名：
       <el-input type="text"
                   v-model="loginForm.username"
                   placeholder="请输入用户名"
                   style="width: 80%;text-align: center">
       <i slot="prefix" class="el-icon-user" style="color: white"></i>
     </el-input>
-    </el-tooltip>
     </el-form-item>
     <el-form-item style="color: white">
       密码：
-      <el-tooltip class="item" effect="dark" content="请输入手机号/邮箱/" placement="top">
      <el-input type="password"
                v-model="loginForm.password"
                placeholder="请输入密码"
                   style="width: 80%;text-align: center">
       <i slot="prefix" class="el-icon-unlock" style="color: white"></i>
     </el-input>
-      </el-tooltip>
     </el-form-item>
     <br>
     <el-form-item style="width: 100%" >
@@ -45,15 +42,15 @@
 </template>
 
 <script>
-  import qs from "qs"
-  import axios from "axios"
+//   import qs from "qs"
+// import axios from "axios"
   export default {
     name: "index",
     data(){
       return{
         loginForm:{
           username:'admin',
-          password:'admin123'
+          password:'123456'
         }
       }
     },
@@ -69,15 +66,41 @@
         })
       },
       login () {
-        axios.post('http://118.31.250.71:8428/login',qs.stringify(this.loginForm) )
-          .then(successResponse => {
-            console.log(successResponse)
-            if (successResponse.status ===200){
-              this.$router.replace({path:'/index'})
+        this.$axios.post('http://47.97.207.96:8081/login',this.$qs.stringify({
+          username: this.loginForm.username,
+          password:this.loginForm.password
+        }))
+        // this.$axios({
+        //   method: 'post',
+        //   url: 'http://47.97.207.96:8081/login',
+        //   data: this.$qs.stringify({     //axios的post方法访问后端this.qs.stringify(
+        //     username: this.loginForm.username,
+        //     password:this.loginForm.password
+        //   }),
+        // })
+          .then((successResponse)=>{                    //请求成功后执行函数
+            if(successResponse.data.code === 200){
+              this.$router.replace('/index')	//登录验证成功路由实现跳转
+              this.$notify({
+                title: '提示',
+                message: '用户登录成功',
+                duration: 3000
+              });
+            }else{
+              this.$notify({
+                title: '提示',
+                message: '用户登录失败',
+                duration: 3000
+              });
             }
           })
-          // eslint-disable-next-line no-unused-vars
-          .catch(failResponse =>{
+          .catch(err=>{                   //请求错误后执行函数
+            this.$notify({
+              title: '提示',
+              message: '用户访问错误',
+              duration: 3000
+            });
+            console.log(err)
           })
       }
     }

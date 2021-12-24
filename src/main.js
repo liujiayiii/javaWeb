@@ -5,6 +5,11 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import axios from 'axios'
+Vue.prototype.$axios = axios// 全局注册，之后可在其他组件中通过 this.$axios 发送数据
+axios.defaults.baseURL = 'http://47.97.207.96:8081/'//设置一个基础请求地址
+import qs from 'qs';
+Vue.prototype.$qs = qs
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 /* eslint-disable no-new */
