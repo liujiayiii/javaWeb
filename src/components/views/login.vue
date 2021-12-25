@@ -49,8 +49,8 @@
     data(){
       return{
         loginForm:{
-          username:'admin',
-          password:'123456'
+          username:'',
+          password:''
         }
       }
     },
@@ -66,10 +66,15 @@
         })
       },
       login () {
-        this.$axios.post('http://47.97.207.96:8081/login',this.$qs.stringify({
+        this.$axios.post('http://47.97.207.96:8081/login',JSON.stringify({
           username: this.loginForm.username,
           password:this.loginForm.password
-        }))
+        }),{
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+
         // this.$axios({
         //   method: 'post',
         //   url: 'http://47.97.207.96:8081/login',
@@ -132,7 +137,7 @@
   color: #ffffff;
 }
 #poster {
-  background:url("../../assets/5cd154cef1b12.jpg") no-repeat;
+  background:url("../../assets/k.jpg") no-repeat;
   background-position: center;
   height: 100%;
   width: 100%;

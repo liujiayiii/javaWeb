@@ -233,21 +233,49 @@
 
 
       register: function() {
-        this.$refs.ruleForm.validate((valid) => {
+        this.$refs.ruleForm.validate( async (valid) => {
           if (valid) {
-            this.$axios.post('http://47.97.207.96:8081/registry/submit',this.$qs.stringify({
+            const res =await this.$axios.post(
+              "http://47.97.207.96:8081/registry/submit",
+              JSON.stringify({
                 username: this.ruleForm.username,
-                telephone:this.ruleForm.telephone,
-                address:this.ruleForm.address,
-                // code:this.ruleForm.code,
+                telephone: this.ruleForm.telephone,
+                address: this.ruleForm.address,
                 password: this.ruleForm.password,
-              })),
+              }),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
 
-            setTimeout(()=> {
-              this.$router.replace({path: '/login'});
-            }, 2000)
+            if(res.data.success){
+              this.$message.success('注册成功')
+              setTimeout(() => {
+                this.$router.replace({ path: "/login" });
+              }, 2000);
+            }
+
           }
-        })
+
+
+        });
+        // this.$refs.ruleForm.validate((valid) => {
+        //   if (valid) {
+        //     this.$axios.post('http://47.97.207.96:8081/registry/submit',this.$qs.stringify({
+        //         username: this.ruleForm.username,
+        //         telephone:this.ruleForm.telephone,
+        //         address:this.ruleForm.address,
+        //         // code:this.ruleForm.code,
+        //         password: this.ruleForm.password,
+        //       })),
+        //
+        //     setTimeout(()=> {
+        //       this.$router.replace({path: '/login'});
+        //     }, 2000)
+        //   }
+        // })
       },
       goBack() {
         this.$router.push({
